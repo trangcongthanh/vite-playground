@@ -1,0 +1,7 @@
+.test {
+}
+
+.test img {
+  -webkit-mask-image: url("test.svg");
+  -webkit-mask-size: 100%;
+}
