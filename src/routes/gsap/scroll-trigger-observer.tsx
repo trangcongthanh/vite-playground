@@ -100,7 +100,8 @@ export function ScrollTriggerObserver() {
 
   useLayoutEffect(() => {
     const { current: container } = containerRef
-    const items = container?.querySelectorAll<HTMLDivElement>('div')
+    const items = container?.querySelectorAll<HTMLDivElement>('div.screen')
+    console.log(items?.length)
 
     ScrollTrigger.observe({
       target: window,
