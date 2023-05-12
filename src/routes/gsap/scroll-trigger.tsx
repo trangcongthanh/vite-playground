@@ -2,7 +2,10 @@ import { gsap } from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLayoutEffect, useRef } from 'react'
+
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+ScrollTrigger.config({ ignoreMobileResize: true })
+ScrollTrigger.clearScrollMemory()
 
 export function GsapScrollTrigger() {
   const scroller = useRef(null)
@@ -89,10 +92,10 @@ function HorizontalScroll() {
     <div
       className="flex h-screen w-[400%] snap-start flex-nowrap overflow-hidden [&>*]:h-[100vh] [&>*]:w-[100%] [&>*]:overflow-hidden"
       ref={containerRef}>
-      <div className="bg-red-100">Screen 2 - 1</div>
-      <div className="bg-red-200">Screen 2 - 2</div>
-      <div className="bg-red-300">Screen 2 - 3</div>
-      <div className="bg-red-400">Screen 2 - 4</div>
+      <div className="bg-red-100 will-change-transform">Screen 2 - 1</div>
+      <div className="bg-red-200 will-change-transform">Screen 2 - 2</div>
+      <div className="bg-red-300 will-change-transform">Screen 2 - 3</div>
+      <div className="bg-red-400 will-change-transform">Screen 2 - 4</div>
     </div>
   )
 }
@@ -147,10 +150,10 @@ function VerticalScroll() {
     <div
       className="h-screen snap-start overflow-hidden bg-black text-white [&>*]:h-[100vh] [&>*]:w-[100vw] [&>*]:overflow-hidden"
       ref={containerRef}>
-      <div>Screen 4 - 1</div>
-      <div>Screen 4 - 2</div>
-      <div>Screen 4 - 3</div>
-      <div>Screen 4 - 4</div>
+      <div className="will-change-transform">Screen 4 - 1</div>
+      <div className="will-change-transform">Screen 4 - 2</div>
+      <div className="will-change-transform">Screen 4 - 3</div>
+      <div className="will-change-transform">Screen 4 - 4</div>
     </div>
   )
 }
