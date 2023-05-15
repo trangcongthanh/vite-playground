@@ -6,7 +6,7 @@ const ROOT_PATH = '/gsap'
 
 export function Layout() {
   return (
-    <div className="relative flex flex-col min-h-screen">
+    <div className="relative flex min-h-screen flex-col">
       {/* <nav className="sticky top-0"> */}
       {/*   <ul className="flex gap-4"> */}
       {/*     <li> */}
@@ -24,7 +24,7 @@ export function Layout() {
 
 export const gsapRoutes = {
   path: ROOT_PATH,
-  element: <Layout />,
+  // element: <Layout />,
   children: [
     {
       index: true,
