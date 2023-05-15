@@ -15,6 +15,7 @@ import { jotaiRoutes } from './jotai/router'
 import { JsonViewerRoute } from './json-viewer'
 import { MantineRoute } from './mantine'
 import { NotFoundRoute } from './not-found'
+import { plotRoute } from './plot/router'
 import { POCBuilderRoute } from './poc-builder'
 import { reactQueryRoute } from './react-query'
 import { RHFMultiLvlPickListRoute } from './rhf/multi-lvl-pick-list'
@@ -51,6 +52,7 @@ export const router = createBrowserRouter([
       virtualRoute,
       stickyItemRoute,
       downloaderRoute,
+      plotRoute,
       NotFoundRoute,
     ],
   },
