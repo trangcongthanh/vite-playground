@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { registerComponent } from './app/app-register'
 import { appRoutes } from './app/router'
 import { componentsRoute } from './components'
+import { cssRoute } from './css/router'
 import { CustomEventRoute } from './custom-event'
 import { DateFnsRoute } from './date-fns'
 import { downloaderRoute } from './downloader'
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
       stickyItemRoute,
       downloaderRoute,
       plotRoute,
+      cssRoute,
       NotFoundRoute,
     ],
   },
