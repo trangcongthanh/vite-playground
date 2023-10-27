@@ -1,0 +1,3226 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/me": {
+      "get": {
+        "operationId": "UsersController_getMe",
+        "summary": "Get detail of the current user.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserEntity" }
+              }
+            }
+          }
+        },
+        "tags": ["Users"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/campaigns": {
+      "get": {
+        "operationId": "CampaignController_listCampaigns",
+        "parameters": [
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "StartDate",
+              "enum": [
+                "StartDate",
+                "CampaignId",
+                "CampaignName",
+                "Funnel",
+                "Budget",
+                "ROI",
+                "ROAS",
+                "Channel",
+                "Impressions",
+                "Conversions",
+                "Clicks"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderDirection",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "ASC",
+              "enum": ["ASC", "DESC"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "stages",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CampaignCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Campaigns"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/campaigns/{id}": {
+      "get": {
+        "operationId": "CampaignController_getCampaign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CampaignResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Campaigns"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/campaigns/{id}/graphs": {
+      "get": {
+        "operationId": "CampaignController_getCampaignGraph",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignGraphResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Campaigns"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/campaigns/{id}/variations": {
+      "post": {
+        "operationId": "CampaignController_createCampVariation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateVariationDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignVariationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Campaigns"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/campaigns/{id}/ad-groups": {
+      "get": {
+        "operationId": "CampaignController_getCampaignAdGroups",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "StartDate",
+              "enum": [
+                "StartDate",
+                "Impressions",
+                "Clicks",
+                "AverageCost",
+                "AverageCPC",
+                "AverageCpm"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderDirection",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "ASC",
+              "enum": ["ASC", "DESC"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignAdGroupCollection"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Campaigns"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/content-settings": {
+      "get": {
+        "operationId": "CampaignController_getContentSettings",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Campaigns"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/audience-settings": {
+      "get": {
+        "operationId": "CampaignController_getAudienceSettings",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Campaigns"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/ad-groups": {
+      "get": {
+        "operationId": "AdGroupController_listCampaigns",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "AdGroupId",
+              "enum": [
+                "AdGroupId",
+                "AdGroupName",
+                "Budget",
+                "Clicks",
+                "Impressions",
+                "Interactions",
+                "TotalSpend"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderDirection",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "ASC",
+              "enum": ["ASC", "DESC"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeIds",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AdGroupCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Ad-Groups"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/platforms": {
+      "get": {
+        "operationId": "ReportsController_getPlatforms",
+        "summary": "List of platforms",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "tags": ["Reports"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/channels": {
+      "get": {
+        "operationId": "ReportsController_getChannels",
+        "summary": "List of channels",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "tags": ["Reports"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/funnels": {
+      "get": {
+        "operationId": "ReportsController_getFunnels",
+        "summary": "List of funnels",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "tags": ["Reports"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/summary": {
+      "get": {
+        "operationId": "ReportsController_getReports",
+        "summary": "Report summary",
+        "parameters": [
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportSummaryResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Reports"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/graphs": {
+      "get": {
+        "operationId": "ReportsController_getReportGraphs",
+        "summary": "Report data for graph",
+        "parameters": [
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ReportGraphResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Reports"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/funnels": {
+      "get": {
+        "operationId": "ReportsController_getReportFunnels",
+        "summary": "Report data for funnels",
+        "parameters": [
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportFunnelsResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Reports"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/search-issues": {
+      "get": {
+        "operationId": "ReportsController_getSearchIssues",
+        "summary": "Report search issues",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchIssueResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Reports"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/kpis": {
+      "get": {
+        "operationId": "ExperimentsController_getKPIs",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/countries": {
+      "get": {
+        "operationId": "ExperimentsController_listCountries",
+        "summary": "List countries",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/filter-granularities": {
+      "get": {
+        "operationId": "ExperimentsController_listFilterGranularities",
+        "summary": "List filter granularity",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          },
+          {
+            "name": "country",
+            "required": false,
+            "in": "query",
+            "description": "Country code",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/granularities": {
+      "get": {
+        "operationId": "ExperimentsController_listGranularities",
+        "summary": "List granularity",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          },
+          {
+            "name": "country",
+            "required": false,
+            "in": "query",
+            "description": "Country code",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/census": {
+      "get": {
+        "operationId": "ExperimentsController_listCensus",
+        "summary": "List censuses",
+        "parameters": [
+          {
+            "name": "country",
+            "required": false,
+            "in": "query",
+            "description": "Country code",
+            "schema": { "default": "IT", "type": "string" }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Granularity, should be id of Granularity",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/CensusResponse" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/experiments": {
+      "get": {
+        "operationId": "ExperimentsController_listExperiments",
+        "summary": "List experiments",
+        "parameters": [
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          },
+          {
+            "name": "orderBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "ExperimentID",
+              "enum": [
+                "ExperimentID",
+                "ExperimentName",
+                "ExperimentType",
+                "NumberOfClusters",
+                "Clicks"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "orderDirection",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "ASC",
+              "enum": ["ASC", "DESC"],
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "activated",
+              "enum": ["draft", "activated"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperimentCollection"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "ExperimentsController_createExperiment",
+        "summary": "Create experiment",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateExpDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExperimentResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/experiments/{id}": {
+      "get": {
+        "operationId": "ExperimentsController_getExpById",
+        "summary": "Get experiment info",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExperimentResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      },
+      "put": {
+        "operationId": "ExperimentsController_updateExperiments",
+        "summary": "Update experiment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateExpDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExperimentResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "ExperimentsController_deleteExperiment",
+        "summary": "Delete experiment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExperimentResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/experiments/{id}/markets": {
+      "get": {
+        "operationId": "ExperimentsController_getExpMarkets",
+        "summary": "Get experiment market data",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: month ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ExpMarketResponse" }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/experiments/{id}/markets/{marketId}": {
+      "get": {
+        "operationId": "ExperimentsController_getExpMarketGraph",
+        "summary": "Get experiment market graph data",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "marketId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: month ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpMarketGraphResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      },
+      "put": {
+        "operationId": "ExperimentsController_updateExpMarket",
+        "summary": "Add campaign to market",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "marketId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateExpMarketDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExpMarketResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/experiments/{id}/ad-groups": {
+      "post": {
+        "operationId": "ExperimentsController_updateExpAdGroups",
+        "summary": "Update ad-group assigned to this experiment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExperimentResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Experiments"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/optimization-modes": {
+      "get": {
+        "operationId": "OptimizationController_getOptModes",
+        "summary": "List of optimization mode",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/optimization-update-intervals": {
+      "get": {
+        "operationId": "OptimizationController_getUpdateInterval",
+        "summary": "List of optimization update interval",
+        "parameters": [
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CommonCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/optimizations": {
+      "get": {
+        "operationId": "OptimizationController_getOptimizations",
+        "summary": "List of optimizations",
+        "parameters": [
+          {
+            "name": "channels",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "platforms",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "searchText",
+            "required": false,
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 0, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": { "default": 20, "type": "number" }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": ["draft", "running", "ended"],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizationCollection"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      },
+      "post": {
+        "operationId": "OptimizationController_createNewOpt",
+        "summary": "Get optimization",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateOptDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/optimizations/{id}": {
+      "get": {
+        "operationId": "OptimizationController_getOptimization",
+        "summary": "Get optimization by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      },
+      "put": {
+        "operationId": "OptimizationController_updateOpt",
+        "summary": "Update optimization",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateOptDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "OptimizationController_deleteOpt",
+        "summary": "Delete optimization",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizationResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/optimizations/{id}/campaigns": {
+      "get": {
+        "operationId": "OptimizationController_getCampaigns",
+        "summary": "List optimization' campaign",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OptimizationCampaignResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/optimizations/{id}/graphs": {
+      "get": {
+        "operationId": "OptimizationController_getOptGraph",
+        "summary": "Get optimization sankey chart data",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OptimizationGraphResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/optimizations/{id}/campaigns/{campaignId}": {
+      "put": {
+        "operationId": "OptimizationController_updateLimitsByCampaignId",
+        "summary": "Update optimization's campaign configuration",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "campaignId",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateOptCampaignDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OptimizationCampaignResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Optimizations"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/match-types": {
+      "get": {
+        "operationId": "DiagnosticController_getReportMatchTypes",
+        "summary": "Report data by match type",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagMatchTypeResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/device-types": {
+      "get": {
+        "operationId": "DiagnosticController_getReportDeviceTypes",
+        "summary": "Report data by device type",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagDeviceTypeResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/audiences": {
+      "get": {
+        "operationId": "DiagnosticController_getReportAudiences",
+        "summary": "Report data by audiences",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagAudienceResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/keywords": {
+      "get": {
+        "operationId": "DiagnosticController_getReportKeywords",
+        "summary": "Report data by keywords",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagKeywordResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/campaign-distributions": {
+      "get": {
+        "operationId": "DiagnosticController_getReportCampaignDistributions",
+        "summary": "Report data by campaign distributions",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagCampaignDistributionResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/campaign-quality-scores": {
+      "get": {
+        "operationId": "DiagnosticController_getReportCampaignQualityScores",
+        "summary": "Report data by campaign quality scores",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagCampaignQualityScoreResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/campaign-by-funnels": {
+      "get": {
+        "operationId": "DiagnosticController_getReportCampaignByFunnels",
+        "summary": "Report campaign by funnels",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagCampaignFunnelResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/landing-page-by-funnels": {
+      "get": {
+        "operationId": "DiagnosticController_getReportLPFunnels",
+        "summary": "Report landing page by funnels",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagLandingPageByFunnelResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/landing-page-views": {
+      "get": {
+        "operationId": "DiagnosticController_getReportLPViews",
+        "summary": "Report data by landing page views",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiagLandingPageViewResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/reports/roas-by-states": {
+      "get": {
+        "operationId": "DiagnosticController_getReportROASByStates",
+        "summary": "Report ROAS by States",
+        "parameters": [
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: 6 months ago",
+            "schema": { "format": "date-time", "type": "string" }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "yyyy-MM-dd, default: today",
+            "schema": { "format": "date-time", "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiagROASStageResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Diagnostics"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/ad-accounts": {
+      "post": {
+        "operationId": "SettingController_addAdAccount",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateAdAccountDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AdAccountResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Settings"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "SettingController_getAdAccounts",
+        "parameters": [
+          {
+            "name": "platform",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AdAccountCollection" }
+              }
+            }
+          }
+        },
+        "tags": ["Settings"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/ad-accounts/{id}": {
+      "get": {
+        "operationId": "SettingController_getAdAccountById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AdAccountResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Settings"],
+        "security": [{ "bearer": [] }]
+      },
+      "put": {
+        "operationId": "SettingController_updateAdAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateAdAccountDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AdAccountResponse" }
+              }
+            }
+          }
+        },
+        "tags": ["Settings"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "SettingController_deleteAdAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "204": { "description": "" } },
+        "tags": ["Settings"],
+        "security": [{ "bearer": [] }]
+      }
+    }
+  },
+  "info": {
+    "title": "BCG Marketing Dashboard",
+    "description": "",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "https://marketing-portal.mscnr.com/api",
+      "description": "",
+      "variables": {}
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" }
+    },
+    "schemas": {
+      "UserEntity": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "fullName": { "type": "string" },
+          "email": { "type": "string" },
+          "lastLogin": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "acceptTermAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": { "type": "boolean" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": { "format": "date-time", "type": "string" }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "email",
+          "isActive",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CampaignResponse": {
+        "type": "object",
+        "properties": {
+          "funnel": { "type": "string" },
+          "platform": { "type": "string" },
+          "campaignId": { "type": "string" },
+          "campaignName": { "type": "string" },
+          "channel": { "type": "string" },
+          "budget": { "type": "number" },
+          "ROI": { "type": "number" },
+          "ROAS": { "type": "number" },
+          "CPC": { "type": "number" },
+          "impressions": { "type": "number" },
+          "clicks": { "type": "number" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" },
+          "targetKpi": { "type": "number" }
+        },
+        "required": [
+          "funnel",
+          "platform",
+          "campaignId",
+          "campaignName",
+          "channel",
+          "budget",
+          "ROI",
+          "ROAS",
+          "CPC",
+          "impressions",
+          "clicks",
+          "startDate",
+          "endDate",
+          "targetKpi"
+        ]
+      },
+      "PaginationInfo": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "number" },
+          "limit": { "type": "number" },
+          "offset": { "type": "number" }
+        },
+        "required": ["total", "limit", "offset"]
+      },
+      "CampaignQuery": {
+        "type": "object",
+        "properties": {
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "searchText": { "type": "string" },
+          "offset": { "type": "number", "default": 0 },
+          "limit": { "type": "number", "default": 20 },
+          "orderBy": {
+            "type": "string",
+            "enum": [
+              "StartDate",
+              "CampaignId",
+              "CampaignName",
+              "Funnel",
+              "Budget",
+              "ROI",
+              "ROAS",
+              "Channel",
+              "Impressions",
+              "Conversions",
+              "Clicks"
+            ],
+            "default": "StartDate"
+          },
+          "orderDirection": {
+            "enum": ["ASC", "DESC"],
+            "type": "string",
+            "default": "ASC"
+          },
+          "stages": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "CampaignCollection": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CampaignResponse" }
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationInfo" },
+          "query": { "$ref": "#/components/schemas/CampaignQuery" }
+        },
+        "required": ["data", "pagination", "query"]
+      },
+      "CampaignGraphItem": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string" },
+          "clicks": { "type": "number" },
+          "impressions": { "type": "number" },
+          "conversions": { "type": "number" }
+        },
+        "required": ["date", "clicks", "impressions", "conversions"]
+      },
+      "CampaignGraphQuery": {
+        "type": "object",
+        "properties": {
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "startDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "yyyy-MM-dd, default: 6 months ago"
+          },
+          "endDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "yyyy-MM-dd, default: today"
+          }
+        }
+      },
+      "CampaignGraphResponse": {
+        "type": "object",
+        "properties": {
+          "clicks": { "type": "number" },
+          "growthClicks": { "type": "number" },
+          "conversions": { "type": "number" },
+          "growthConversions": { "type": "number" },
+          "impressions": { "type": "number" },
+          "growthImpressions": { "type": "number" },
+          "budgetPerDay": { "type": "number" },
+          "strategy": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CampaignGraphItem" }
+          },
+          "query": { "$ref": "#/components/schemas/CampaignGraphQuery" }
+        },
+        "required": [
+          "clicks",
+          "growthClicks",
+          "conversions",
+          "growthConversions",
+          "impressions",
+          "growthImpressions",
+          "budgetPerDay",
+          "strategy",
+          "data",
+          "query"
+        ]
+      },
+      "AdSetSettings": {
+        "type": "object",
+        "properties": {
+          "adSetId": { "type": "string" },
+          "value": { "type": "number" },
+          "pacing": { "type": "string" },
+          "bidStrategy": { "type": "string" }
+        },
+        "required": ["adSetId"]
+      },
+      "VariationBudgetSetting": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["campaign-level", "ad-set-level"]
+          },
+          "value": { "type": "number" },
+          "pacing": { "type": "string" },
+          "bidStrategy": { "type": "string" },
+          "adSets": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdSetSettings" }
+          }
+        },
+        "required": ["mode"]
+      },
+      "VariationAudienceSetting": {
+        "type": "object",
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["campaign-level", "ad-set-level"]
+          },
+          "audience": { "type": "string" }
+        }
+      },
+      "CreateVariationDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "budgetSetting": {
+            "$ref": "#/components/schemas/VariationBudgetSetting"
+          },
+          "audienceSetting": {
+            "$ref": "#/components/schemas/VariationAudienceSetting"
+          }
+        },
+        "required": ["name"]
+      },
+      "AttrType": {
+        "type": "object",
+        "properties": {
+          "budgetSetting": {
+            "$ref": "#/components/schemas/VariationBudgetSetting"
+          },
+          "audienceSetting": {
+            "$ref": "#/components/schemas/VariationAudienceSetting"
+          },
+          "adSets": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdSetSettings" }
+          }
+        }
+      },
+      "CampaignVariationResponse": {
+        "type": "object",
+        "properties": {
+          "adSets": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdSetSettings" }
+          },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "status": { "type": "string", "enum": ["draft", "activated"] },
+          "type": { "type": "string", "enum": ["original", "variant"] },
+          "parentCampaignId": { "type": "string" },
+          "attributes": { "$ref": "#/components/schemas/AttrType" }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "status",
+          "type",
+          "attributes"
+        ]
+      },
+      "CampaignAdGroupResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "number" },
+          "name": { "type": "string" },
+          "platform": { "type": "string" },
+          "impressions": { "type": "number" },
+          "clicks": { "type": "number" },
+          "averageCpc": { "type": "number" },
+          "averageCpm": { "type": "number" },
+          "averageCost": { "type": "number" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "name",
+          "platform",
+          "impressions",
+          "clicks",
+          "averageCpc",
+          "averageCpm",
+          "averageCost",
+          "startDate",
+          "endDate"
+        ]
+      },
+      "CampaignAdGroupQuery": {
+        "type": "object",
+        "properties": {
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "searchText": { "type": "string" },
+          "offset": { "type": "number", "default": 0 },
+          "limit": { "type": "number", "default": 20 },
+          "orderBy": {
+            "type": "string",
+            "enum": [
+              "StartDate",
+              "Impressions",
+              "Clicks",
+              "AverageCost",
+              "AverageCPC",
+              "AverageCpm"
+            ],
+            "default": "StartDate"
+          },
+          "orderDirection": {
+            "enum": ["ASC", "DESC"],
+            "type": "string",
+            "default": "ASC"
+          }
+        }
+      },
+      "CampaignAdGroupCollection": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CampaignAdGroupResponse" }
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationInfo" },
+          "query": { "$ref": "#/components/schemas/CampaignAdGroupQuery" }
+        },
+        "required": ["data", "pagination", "query"]
+      },
+      "CommonItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" }
+        },
+        "required": ["id", "display"]
+      },
+      "CommonCollection": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CommonItem" }
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationInfo" }
+        },
+        "required": ["data", "pagination"]
+      },
+      "AdGroupResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "platform": { "type": "string" },
+          "clicks": { "type": "number" },
+          "impressions": { "type": "number" },
+          "interactions": { "type": "number" },
+          "budget": { "type": "number" },
+          "totalSpend": { "type": "number" }
+        },
+        "required": [
+          "id",
+          "name",
+          "platform",
+          "clicks",
+          "impressions",
+          "interactions",
+          "budget",
+          "totalSpend"
+        ]
+      },
+      "AdGroupQuery": {
+        "type": "object",
+        "properties": {
+          "searchText": { "type": "string" },
+          "offset": { "type": "number", "default": 0 },
+          "limit": { "type": "number", "default": 20 },
+          "orderBy": {
+            "type": "string",
+            "enum": [
+              "AdGroupId",
+              "AdGroupName",
+              "Budget",
+              "Clicks",
+              "Impressions",
+              "Interactions",
+              "TotalSpend"
+            ],
+            "default": "AdGroupId"
+          },
+          "orderDirection": {
+            "enum": ["ASC", "DESC"],
+            "type": "string",
+            "default": "ASC"
+          },
+          "excludeIds": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "AdGroupCollection": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdGroupResponse" }
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationInfo" },
+          "query": { "$ref": "#/components/schemas/AdGroupQuery" }
+        },
+        "required": ["data", "pagination", "query"]
+      },
+      "ItemSummary": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "total": { "type": "number" },
+          "growth": { "type": "number" },
+          "ROI": { "type": "number" },
+          "ROAS": { "type": "number" }
+        },
+        "required": ["name", "total", "growth", "ROI", "ROAS"]
+      },
+      "ReportsQuery": {
+        "type": "object",
+        "properties": {
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "startDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "yyyy-MM-dd, default: 6 months ago"
+          },
+          "endDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "yyyy-MM-dd, default: today"
+          }
+        }
+      },
+      "ReportSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "number" },
+          "growth": { "type": "number" },
+          "channels": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemSummary" }
+          },
+          "platforms": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemSummary" }
+          },
+          "query": { "$ref": "#/components/schemas/ReportsQuery" }
+        },
+        "required": ["total", "growth", "channels", "platforms", "query"]
+      },
+      "GraphItems": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string" },
+          "ROI": { "type": "number" },
+          "ROAS": { "type": "number" }
+        },
+        "required": ["date", "ROI", "ROAS"]
+      },
+      "ReportGraphResponse": {
+        "type": "object",
+        "properties": {
+          "totalROI": { "type": "number" },
+          "totalROAS": { "type": "number" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/GraphItems" }
+          },
+          "query": { "$ref": "#/components/schemas/ReportsQuery" }
+        },
+        "required": ["totalROI", "totalROAS", "items", "query"]
+      },
+      "HighlightCampaign": {
+        "type": "object",
+        "properties": {
+          "campaignId": { "type": "string" },
+          "campaignName": { "type": "string" },
+          "totalSpend": { "type": "number" },
+          "channel": { "type": "string" },
+          "startDate": { "type": "string" },
+          "endDate": { "type": "string" }
+        },
+        "required": [
+          "campaignId",
+          "campaignName",
+          "totalSpend",
+          "channel",
+          "startDate",
+          "endDate"
+        ]
+      },
+      "FunnelSummary": {
+        "type": "object",
+        "properties": {
+          "stageName": { "type": "string" },
+          "ROI": { "type": "number" },
+          "totalCampaigns": { "type": "number" },
+          "totalBudget": { "type": "number" },
+          "targetKPI": { "type": "number" },
+          "highlightCampaigns": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/HighlightCampaign" }
+          }
+        },
+        "required": [
+          "stageName",
+          "ROI",
+          "totalCampaigns",
+          "totalBudget",
+          "targetKPI",
+          "highlightCampaigns"
+        ]
+      },
+      "ReportFunnelsResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/FunnelSummary" }
+          },
+          "query": { "$ref": "#/components/schemas/ReportsQuery" }
+        },
+        "required": ["data", "query"]
+      },
+      "SearchIssueResponse": {
+        "type": "object",
+        "properties": {
+          "analysis": { "type": "string" },
+          "check": { "type": "string" },
+          "explanation": { "type": "string" },
+          "result": { "type": "string" },
+          "dimension": { "type": "string" },
+          "channel": { "type": "string" }
+        },
+        "required": [
+          "analysis",
+          "check",
+          "explanation",
+          "result",
+          "dimension",
+          "channel"
+        ]
+      },
+      "CensusResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "population": { "type": "number" },
+          "familySize": { "type": "number" },
+          "medianIncome": { "type": "number" },
+          "geoData": { "type": "object" }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "population",
+          "familySize",
+          "medianIncome",
+          "geoData"
+        ]
+      },
+      "ExperimentResponse": {
+        "type": "object",
+        "properties": {
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "geoGranularityFilter": { "type": "string" },
+          "geoFilter": { "type": "array", "items": { "type": "string" } },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "kpis": { "type": "array", "items": { "type": "string" } },
+          "strategy": {
+            "enum": ["matched-market", "in-platform-AB-testing"],
+            "type": "string"
+          },
+          "country": { "type": "string" },
+          "granularity": { "type": "string" },
+          "numberOfMarket": { "type": "number" },
+          "sizeOfMarket": { "type": "number" },
+          "status": { "enum": ["draft", "activated"], "type": "string" }
+        },
+        "required": [
+          "platforms",
+          "id",
+          "name",
+          "description",
+          "channels",
+          "kpis",
+          "strategy",
+          "country",
+          "granularity",
+          "numberOfMarket",
+          "sizeOfMarket",
+          "status"
+        ]
+      },
+      "ExperimentQuery": {
+        "type": "object",
+        "properties": {
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "searchText": { "type": "string" },
+          "offset": { "type": "number", "default": 0 },
+          "limit": { "type": "number", "default": 20 },
+          "orderBy": {
+            "type": "string",
+            "enum": [
+              "ExperimentID",
+              "ExperimentName",
+              "ExperimentType",
+              "NumberOfClusters",
+              "Clicks"
+            ],
+            "default": "ExperimentID"
+          },
+          "orderDirection": {
+            "enum": ["ASC", "DESC"],
+            "type": "string",
+            "default": "ASC"
+          },
+          "status": {
+            "enum": ["draft", "activated"],
+            "type": "string",
+            "default": "activated"
+          }
+        }
+      },
+      "ExperimentCollection": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ExperimentResponse" }
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationInfo" },
+          "query": { "$ref": "#/components/schemas/ExperimentQuery" }
+        },
+        "required": ["data", "pagination", "query"]
+      },
+      "ExpMarketResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "regions": { "type": "array", "items": { "type": "string" } },
+          "clicks": { "type": "number" },
+          "impressions": { "type": "number" },
+          "conversions": { "type": "number" },
+          "ROAS": { "type": "number" },
+          "CPC": { "type": "number" },
+          "CPM": { "type": "number" },
+          "adGroup": { "$ref": "#/components/schemas/AdGroupResponse" }
+        },
+        "required": [
+          "id",
+          "name",
+          "regions",
+          "clicks",
+          "impressions",
+          "conversions",
+          "ROAS",
+          "CPC",
+          "CPM"
+        ]
+      },
+      "MarketGraphItem": {
+        "type": "object",
+        "properties": {
+          "clicks": { "type": "number" },
+          "impressions": { "type": "number" },
+          "conversation": { "type": "number" },
+          "date": { "type": "string" }
+        },
+        "required": ["clicks", "impressions", "conversation", "date"]
+      },
+      "ExpMarketGraphQuery": {
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "yyyy-MM-dd, default: month ago"
+          },
+          "endDate": {
+            "format": "date-time",
+            "type": "string",
+            "description": "yyyy-MM-dd, default: today"
+          }
+        }
+      },
+      "ExpMarketGraphResponse": {
+        "type": "object",
+        "properties": {
+          "graphs": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/MarketGraphItem" }
+          },
+          "query": { "$ref": "#/components/schemas/ExpMarketGraphQuery" }
+        },
+        "required": ["graphs", "query"]
+      },
+      "UpdateExpMarketDto": {
+        "type": "object",
+        "properties": { "adGroupId": { "type": "string" } },
+        "required": ["adGroupId"]
+      },
+      "CreateExpDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "kpis": { "type": "array", "items": { "type": "string" } },
+          "strategy": {
+            "type": "string",
+            "enum": ["matched-market", "in-platform-AB-testing"]
+          },
+          "country": { "type": "string" },
+          "geoGranularityFilter": { "type": "string" },
+          "geoFilter": { "type": "array", "items": { "type": "string" } },
+          "granularity": { "type": "string" },
+          "numberOfMarket": { "type": "number", "minimum": 1 },
+          "sizeOfMarket": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "required": ["name", "description", "platforms", "channels", "kpis"]
+      },
+      "UpdateExpDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "kpis": { "type": "array", "items": { "type": "string" } },
+          "strategy": {
+            "enum": ["matched-market", "in-platform-AB-testing"],
+            "type": "string"
+          },
+          "country": { "type": "string" },
+          "geoGranularityFilter": { "type": "string" },
+          "geoFilter": { "type": "array", "items": { "type": "string" } },
+          "granularity": { "type": "string" },
+          "numberOfMarket": { "type": "number", "minimum": 1 },
+          "sizeOfMarket": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      },
+      "ScopeInfo": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["campaign-groups", "campaigns", "ad-groups"]
+          },
+          "data": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["type", "data"]
+      },
+      "OptimizationResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "status": { "enum": ["draft", "running", "ended"], "type": "string" },
+          "clusterCount": { "type": "number" },
+          "startDate": { "format": "date-time", "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "description": { "type": "string" },
+          "mode": { "enum": ["manual", "automatic"], "type": "string" },
+          "upperLimit": { "type": "number" },
+          "lowerLimit": { "type": "number" },
+          "kpis": { "type": "array", "items": { "type": "string" } },
+          "updateInterval": { "type": "string" },
+          "scopes": { "$ref": "#/components/schemas/ScopeInfo" }
+        },
+        "required": [
+          "id",
+          "name",
+          "type",
+          "status",
+          "clusterCount",
+          "startDate"
+        ]
+      },
+      "OptimizationQuery": {
+        "type": "object",
+        "properties": {
+          "channels": { "type": "array", "items": { "type": "string" } },
+          "platforms": { "type": "array", "items": { "type": "string" } },
+          "searchText": { "type": "string" },
+          "offset": { "type": "number", "default": 0 },
+          "limit": { "type": "number", "default": 20 },
+          "status": { "enum": ["draft", "running", "ended"], "type": "string" }
+        }
+      },
+      "OptimizationCollection": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OptimizationResponse" }
+          },
+          "pagination": { "$ref": "#/components/schemas/PaginationInfo" },
+          "query": { "$ref": "#/components/schemas/OptimizationQuery" }
+        },
+        "required": ["data", "pagination", "query"]
+      },
+      "OptimizationCampaignResponse": {
+        "type": "object",
+        "properties": {
+          "clicks": { "type": "number" },
+          "conversions": { "type": "number" },
+          "impressions": { "type": "number" },
+          "budget": { "type": "number" },
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "upperLimit": { "type": "number" },
+          "lowerLimit": { "type": "number" },
+          "mode": { "enum": ["manual", "automatic"], "type": "string" },
+          "funnel": { "type": "string" },
+          "channel": { "type": "string" },
+          "platform": { "type": "string" }
+        },
+        "required": [
+          "clicks",
+          "conversions",
+          "impressions",
+          "budget",
+          "id",
+          "name",
+          "upperLimit",
+          "lowerLimit",
+          "mode",
+          "funnel",
+          "channel",
+          "platform"
+        ]
+      },
+      "OptimizationGraphResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "parentId": { "type": "string" },
+          "value": { "type": "number" },
+          "percentage": { "type": "number" }
+        },
+        "required": ["id", "display", "value", "percentage"]
+      },
+      "CreateOptDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string" },
+          "scopes": { "$ref": "#/components/schemas/ScopeInfo" },
+          "upperLimit": { "type": "number" },
+          "lowerLimit": { "type": "number" },
+          "kpis": { "type": "array", "items": { "type": "string" } },
+          "startDate": { "format": "date-time", "type": "string" },
+          "updateInterval": { "type": "string" },
+          "endDate": { "format": "date-time", "type": "string" },
+          "mode": { "enum": ["manual", "automatic"], "type": "string" }
+        },
+        "required": ["name", "description", "type", "scopes"]
+      },
+      "UpdateOptCampaignDto": {
+        "type": "object",
+        "properties": {
+          "upperLimit": { "type": "number" },
+          "lowerLimit": { "type": "number" },
+          "mode": { "type": "string", "enum": ["manual", "automatic"] }
+        }
+      },
+      "DiagMatchTypeResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "spend": { "type": "number" },
+          "percentage": { "type": "number" },
+          "color": { "type": "string" }
+        },
+        "required": ["id", "display", "spend", "percentage"]
+      },
+      "DiagDeviceTypeResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "spend": { "type": "number" },
+          "costPerConversion": { "type": "number" },
+          "trafficPercentage": { "type": "number" },
+          "conversionPercentage": { "type": "number" }
+        },
+        "required": [
+          "id",
+          "display",
+          "spend",
+          "costPerConversion",
+          "trafficPercentage",
+          "conversionPercentage"
+        ]
+      },
+      "DiagAudienceResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "spend": { "type": "number" },
+          "costPercentage": { "type": "number" },
+          "costPerClick": { "type": "number" },
+          "costPerConversion": { "type": "number" }
+        },
+        "required": [
+          "id",
+          "display",
+          "spend",
+          "costPercentage",
+          "costPerClick",
+          "costPerConversion"
+        ]
+      },
+      "DiagKeywordResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "ROAS": { "type": "number" },
+          "CPC": { "type": "number" },
+          "impressionPercentage": { "type": "number" }
+        },
+        "required": ["id", "display", "ROAS", "CPC", "impressionPercentage"]
+      },
+      "DiagCampaignDistributionResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "spend": { "type": "number" },
+          "costPercentage": { "type": "number" },
+          "costPerConversion": { "type": "number" },
+          "CPC": { "type": "number" },
+          "color": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "display",
+          "spend",
+          "costPercentage",
+          "costPerConversion",
+          "CPC"
+        ]
+      },
+      "DiagCampaignQualityScoreResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "spend": { "type": "number" },
+          "costPercentage": { "type": "number" },
+          "color": { "type": "string" }
+        },
+        "required": ["id", "display", "spend", "costPercentage"]
+      },
+      "CommonValueItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "value": { "type": "number" }
+        },
+        "required": ["id", "display", "value"]
+      },
+      "DiagCampaignFunnelResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CommonValueItem" }
+          }
+        },
+        "required": ["id", "display", "data"]
+      },
+      "DiagLandingPageByFunnelResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "funnelOrder": { "type": "number" },
+          "spend": { "type": "number" },
+          "impressionPercentage": { "type": "number" },
+          "costPerLandingPageView": { "type": "number" },
+          "clickLandingPageCVR": { "type": "number" },
+          "landingPageConversionCVR": { "type": "number" },
+          "CPA": { "type": "number" },
+          "ROAS": { "type": "number" },
+          "landingPageName": { "type": "string" },
+          "isPromotion": { "type": "boolean" },
+          "color": { "type": "string" }
+        },
+        "required": [
+          "id",
+          "display",
+          "funnelOrder",
+          "spend",
+          "impressionPercentage",
+          "costPerLandingPageView",
+          "clickLandingPageCVR",
+          "landingPageConversionCVR",
+          "CPA",
+          "ROAS",
+          "landingPageName",
+          "isPromotion"
+        ]
+      },
+      "LandingPageView": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "spend": { "type": "number" },
+          "costPerLandingPageView": { "type": "number" },
+          "color": { "type": "string" }
+        },
+        "required": ["id", "display", "spend", "costPerLandingPageView"]
+      },
+      "LandingPageViewGroup": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CommonValueItem" }
+          }
+        },
+        "required": ["id", "display", "data"]
+      },
+      "DiagLandingPageViewResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LandingPageView" }
+          },
+          "group": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/LandingPageViewGroup" }
+          }
+        },
+        "required": ["data", "group"]
+      },
+      "DiagROASStageResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "display": { "type": "string" },
+          "spend": { "type": "number" },
+          "ROAS": { "type": "number" },
+          "color": { "type": "string" }
+        },
+        "required": ["id", "display", "spend", "ROAS"]
+      },
+      "CreateAdAccountDto": {
+        "type": "object",
+        "properties": {
+          "accountId": { "type": "string" },
+          "platform": { "type": "string" },
+          "name": { "type": "string" }
+        },
+        "required": ["accountId", "platform"]
+      },
+      "AdAccountResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "accountId": { "type": "string" },
+          "platform": { "type": "string" }
+        },
+        "required": ["id", "name", "accountId", "platform"]
+      },
+      "AdAccountCollection": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdAccountResponse" }
+          }
+        },
+        "required": ["data"]
+      },
+      "UpdateAdAccountDto": {
+        "type": "object",
+        "properties": {
+          "accountId": { "type": "string" },
+          "platform": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      }
+    }
+  }
+}

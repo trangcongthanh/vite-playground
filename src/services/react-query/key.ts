@@ -34,3 +34,26 @@ export function createQueryKeys<TRoot extends string, TFns extends Record<string
     },
   }) as CreateQueryKeysResult<TRoot, TFns>
 }
+
+export function createQueryKeysV2(root: string, configs: Record<string, any> = {}) {
+  const handlers = {}
+
+  for (const [scope, { queryKey: key, queryFn }] of Object.entries(configs)) {
+    if (scope === ALL_KEY) {
+      throw new Error(`"${ALL_KEY}" is a key reserved for the "createQueryKeys" function`)
+    }
+    const queryKey = (...args: any[]) => {
+      return [root, scope, ...key(...args)]
+    }
+    queryKey[ALL_KEY] = () => [root, scope]
+    return {
+      ...handlers,
+      [scope]: {
+        queryKey,
+        queryFn,
+      },
+      [ALL_KEY]: () => [root],
+    }
+  }
+  return handlers
+}

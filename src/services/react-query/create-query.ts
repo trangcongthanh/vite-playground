@@ -108,6 +108,17 @@ const useBQuery = createQuery({
   },
 })
 
+function createThing() {
+  const hook = ({ variables }: any) => {
+    const key = () => ['user', variables] as const
+    return ['user', variables]
+  }
+  hook.key = key
+  return hook
+}
+
+export const useThing = createThing({ variables: { id: 1 } })
+
 const TestA = {
   useAQuery,
 }

@@ -1,6 +1,7 @@
 import { Provider, atom, useAtomValue } from 'jotai'
 import { useHydrateAtoms } from 'jotai/utils'
 import { PropsWithChildren } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 type Product = {
   id: number
@@ -25,8 +26,18 @@ function HydrateAtom({
 function RetailUI() {
   const products = useAtomValue(productsAtom)
   const product = useAtomValue(productAtom)
+  const [params, setParams] = useSearchParams()
   return (
     <div>
+      <button
+        onClick={() => {
+          setParams((p) => {
+            p.set('c', new Date().toISOString())
+            return p
+          })
+        }}>
+        a
+      </button>
       <pre>{JSON.stringify(products, null, 2)}</pre>
       <pre>{JSON.stringify(product(1), null, 2)}</pre>
     </div>
